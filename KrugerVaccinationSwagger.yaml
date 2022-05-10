@@ -1,0 +1,364 @@
+openapi: 3.0.1
+info:
+  title: Inventario de vacunación de empleados - Kruger.
+  description: La siguiente API se encarga de manejar la información de los empleados de Kruger y el estado de vacunación en el que se encuentran. 
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api/v1/
+tags:
+- name: Employees
+  description: Maneja la informacion personal de los empleados de la empresa Kruger.
+
+paths:
+
+  /employees:
+    post:
+      tags:
+      - Employees
+      summary: Inserta información básica del empleado en la base de datos
+      parameters:
+        - name: token
+          in: header
+          description: No requiere Token de autenticación.
+          required: false
+          schema:
+            type: string
+          
+        
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyClientesPost'
+        required: true
+      responses:
+        200:
+          description: (OK) La información del empleado se guardo correctamente, nos retorna las credenciales para el inicio de sisión.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoClientesPost'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+    
+  / employees:
+    get:
+      tags:
+      - Employees
+      summary: Obtiene de todos los empleados de la base de datos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      
+      responses:
+        200:
+          description: (OK) Información obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoClientesGet'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized' 
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+  
+  /employees/{idEmployees}:
+    put:
+      tags:
+      - Employees
+      summary: Actualiza la informacion de un empleado en la base de datos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idEmployees
+        in: path
+        description: Identificador del empleado
+        required: true
+        schema:
+          type: string
+          
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyClientesPut'
+        
+      responses:
+        200:
+          description: (OK) Actualización de información correcta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoClientesPost'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized' 
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /employees/{idEmployee}:
+    delete:
+      tags:
+        - Employees
+      summary: Elimina a un empleado de la base de datos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idEmployee
+        in: path
+        description: Identificador del empleado
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: (OK) El cliente se eliminó correctamente
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized' 
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+  
+  /roles:
+    get:
+      tags:
+      - Roles
+      summary: Obtiene todos los roles que se maneja en la empresa.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      
+      responses:
+        200:
+          description: (OK) Información obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyRolGet'
+                
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized' 
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /rroles:
+    post:
+      tags:
+      - Roles
+      summary: Inserta un nuevo rol de empresa en la base de datos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+          
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyRolPost'
+        required: true
+      responses:
+        200:
+          description: (OK) Información obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyRolPost'
+              
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /login:
+    post:
+      tags:
+      - Login
+      summary: Obtiene el token de acceso a la API.
+      parameters:
+        - name: token
+          in: header
+          description: No requiere Token de autenticación.
+          required: false
+          schema:
+            type: string
+          
+        
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyLoginPost'
+        required: true
+      responses:
+        200:
+          description: (OK) Acceso consedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoClientesPost'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+
+
+components:
+  responses:
+    
+    Unauthorized:
+      description: (Unauthorized) No hay autorización para llamar al servicio
+    
+    NotFound:
+      description: (NotFound) No se encontro el servicio. 
+    
+    BadRequest:
+      description: (Bad Request) Los datos enviados son incorrectos o hay datos obligatorios no enviados
+      
+    ServerError:
+      description: Error en servidor
+        
+
+  parameters:
+    token:
+      in: header
+      name: token
+      description: Token de autenticación en API.
+      required: true
+      schema:
+        type: string
+    
+
+  schemas:
+
+    BodyClientesPost:
+      type: object
+      properties:
+        ci:
+          type: string
+          description: Cédula del empleado
+        email:
+          type: string
+          description: Email del empleado
+        firstname:
+          type: string
+          description: Nombre del empleado
+        lastname:
+          type: string
+          description: Apellido del empleado
+        password:
+          type: string
+          description: Contraseña del usuario 
+        cod_rol:
+          type: "integer"
+          format: "int64"
+          description: Rol del empleado dentro de la empresa
+          
+          
+  
+    ExitoClientesPost:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Usuario de la cuenta del empleado. 
+        password: 
+          type: string
+          description: Contraseña de la cuenta del empleado.
+          
+          
+    ExitoClientesGet:
+      type: object
+      properties:
+      
+        id_employees:
+          type: integer
+          enum: [1]
+          description: Identificador unico del empleado
+        ci:
+          type: string
+          description: Cédula del empleado
+        firstname:
+          type: string
+          description: Nombre del empleado
+        lastname:
+          type: string
+          description: Apellido del empleado
+        email:
+          type: string
+          description: Email del empleado
+        password:
+          type: string
+          description: Contraseña del empleado encriptada
+        cod_rol:
+          type: "integer"
+          format: "int64"
+          description: Rol del empleado dentro de la empresa
+          
+          
+    BodyClientesPut:
+      type: object
+      properties:
+        ci:
+          type: string
+          description: Cédula del empleado
+        firstname:
+          type: string
+          description: Nombre del empleado
+        lastname:
+          type: string
+          description: Apellido del empleado
+        email:
+          type: string
+          description: Email del empleado
+        password:
+          type: string
+          description: Contraseña del empleado encriptada
+        cod_rol:
+          type: "integer"
+          format: "int64"
+          description: Rol del empleado dentro de la empresa
+          
+    BodyRolGet:
+      type: object
+      properties:
+        rol_name:
+          type: string
+          description: Nombre del rol de la empresa
+        idRol:
+          type: "integer"
+          format: "int64"
+          description: Identidicador del rol
+          
+    BodyRolPost:
+      type: object
+      properties:
+        rol_name:
+          type: string
+          description: Nombre del rol de la empresa
+    
+    BodyLoginPost:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Usuario del empleado en la API
+        password:
+          type: string
+          description: Contraseña proporcionada
