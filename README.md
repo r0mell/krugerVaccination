@@ -17,7 +17,7 @@ git clone https://github.com/r0mell/krugerVaccination.git
 Una vez clonado el repositorio ábralo con cualquier IDE de desarrollo para proceder a descargar las dependencias necesarias del proyecto.
 
 Es necesario tener instalado el motor de base de datos PosgrestSQL debido a que toda la persistencia de datos se maneja dentro de esta base de datos.
-Dentro del proyecto se encuentra un archivo llamado ScriptKruger, cópielo y ejecute cada línea como se lo indica dentro del archivo.
+Dentro del proyecto se encuentra un archivo llamado ScriptKruger.sql, cópielo y ejecute cada línea como se lo indica dentro del archivo.
 
 Proceda a compilar la aplicación dentro de su IDE de desarrollo, asegúrese de ejecutar estas acciones en orden debido a que la aplicación no genera automáticamente la base de datos ni las tablas. 
 
