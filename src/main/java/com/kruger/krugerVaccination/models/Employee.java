@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name = "employees")
@@ -51,5 +52,31 @@ public class Employee {
     @Setter
     @Column(name = "cod_rol")
     private int cod_rol;
+
+
+//extra information given by employee
+   /*
+     @Getter
+    @Setter
+    @Column(name = "isVaccinated")
+    private boolean isVaccinated;
+
+
+    @Getter
+    @Setter
+    @Column(name = "phone")
+    private String phone;
+
+    @Getter
+    @Setter
+    @Column(name = "address")
+    private String address;
+
+    @Getter
+    @Setter
+    @Column(name = "birthday")
+    private Date birthday;*/
+
+
 
 }

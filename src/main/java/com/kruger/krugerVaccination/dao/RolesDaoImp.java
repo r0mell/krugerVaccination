@@ -25,4 +25,9 @@ public class RolesDaoImp implements RolesDao {
         return listaRoles;
 
     }
+
+    @Override
+    public void postRoles(Rol rol) {
+        entityManager.merge(rol);
+    }
 }

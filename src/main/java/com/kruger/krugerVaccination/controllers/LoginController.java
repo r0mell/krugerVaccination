@@ -27,7 +27,7 @@ public class LoginController {
         Employee employeeLogged = employeesDao.veriflyCredentials(employee);
 
         if (employeeLogged != null) {
-            String tokenJWT =  jwtUtil.create(String.valueOf(employeeLogged.getId_employees()), String.valueOf(employeeLogged.getId_employees()));
+            String tokenJWT =  jwtUtil.create(String.valueOf(employeeLogged.getId_employees()), String.valueOf(employeeLogged.getCod_rol()));
             return tokenJWT;
         } else {
             throw new ResponseStatusException(

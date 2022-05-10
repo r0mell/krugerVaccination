@@ -43,16 +43,39 @@ public class EmployeesController {
                     HttpStatus.UNAUTHORIZED, "Invalid Token Bearer");
         }
 
-        String employeeId = jwtUtil.getKey(token);
+        String employeeIdRol = jwtUtil.getKey(token);
 
-        System.out.println(employeeId);
+        System.out.println(employeeIdRol);
 
-        return employeeId != null;
+        if (!validateRol(employeeIdRol)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "permission denied");
+        }
+
+        return employeeIdRol != null;
     }
 
 
+    private boolean validateRol(String rol) {
+
+        String cod_rol = "1";
+
+        if (rol.equals(cod_rol)) {
+            return true;
+        }
+        return false;
+    }
+
     @RequestMapping(value = "api/v1/employees/{id}", method = RequestMethod.DELETE)
-    public void deleteEmployee(@PathVariable int id) {
+    public void deleteEmployee(@PathVariable int id, @RequestHeader(value = "Authorization") String token) {
+
+        if (!validateToken(token) && !token.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Invalid Token");
+        }
+
+
         employeesDao.deleteEmployee(id);
     }
 
@@ -66,13 +89,18 @@ public class EmployeesController {
 
         employee.setPassword(passwordHash);
 
-        Employee credentialEmployee =  employeesDao.createEmployee(employee, auxPassword);
+        Employee credentialEmployee = employeesDao.createEmployee(employee, auxPassword);
 
         return credentialEmployee;
     }
 
     @RequestMapping(value = "api/v1/employees/{id}", method = RequestMethod.PUT)
-    public void updateEmployee(@RequestBody Employee employee, @PathVariable int id) {
+    public void updateEmployee(@RequestBody Employee employee, @PathVariable int id, @RequestHeader(value = "Authorization") String token) {
+
+        if (!validateToken(token) && !token.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Invalid Token");
+        }
         employeesDao.updateEmployee(employee, id);
     }
 
